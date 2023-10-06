@@ -24,7 +24,13 @@ class HomeScreen extends StatelessWidget {
           const Padding(
             padding: EdgeInsets.symmetric(horizontal: 10),
             child: Divider(),
-          )
+          ),
+          ListTile(
+            title: const Text('Registro de usuario'),
+            subtitle: const Text('Formulario'),
+            trailing: const Icon(Icons.arrow_forward_rounded),
+            onTap: () => GoRouter.of(context).push('/register'),
+          ),
         ],
       ),
     );
