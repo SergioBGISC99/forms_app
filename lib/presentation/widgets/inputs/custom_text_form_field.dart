@@ -1,26 +1,42 @@
 import 'package:flutter/material.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  const CustomTextFormField({super.key});
+
+  final String? label;
+  final String? hint;
+  final String? errorMessage;
+  final Function(String)? onChange;
+  final String? Function(String?)? validator;
+
+  const CustomTextFormField({
+    super.key, 
+    this.label, 
+    this.hint, 
+    this.errorMessage, 
+    this.onChange, 
+    this.validator});
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).colorScheme;
-
     final border = OutlineInputBorder(borderRadius: BorderRadius.circular(40));
 
     return TextFormField(
-      onChanged: (value) => print('value'),
-      validator: (value) {
-        if (value == null) return 'El campo es requerido';
-        if (value.isEmpty) return 'El campo es requerido';
-        if (value.trim().isEmpty) return 'El campo es requerido';
-        return null;
-      },
+      onChanged: onChange,
+      validator: validator,
       decoration: InputDecoration(
           enabledBorder: border,
-          focusedBorder:
-              border.copyWith(borderSide: BorderSide(color: colors.primary))),
+          focusedBorder: border.copyWith(borderSide: BorderSide(color: colors.primary)),
+          errorBorder: border.copyWith(borderSide: BorderSide(color: Colors.red.shade800)),
+          focusedErrorBorder: border.copyWith(borderSide: BorderSide(color: Colors.red.shade800)),
+          
+          isDense: true,
+          label: label != null ? Text(label!): null,
+          hintText: hint,
+          errorText: errorMessage,
+          focusColor: colors.primary,
+          
+          ),   
     );
   }
 }
