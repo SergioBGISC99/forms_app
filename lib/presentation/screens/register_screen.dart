@@ -39,82 +39,59 @@ class _RegisterView extends StatelessWidget {
   }
 }
 
-class _RegisterForm extends StatefulWidget {
+class _RegisterForm extends StatelessWidget {
   const _RegisterForm();
-
-  @override
-  State<_RegisterForm> createState() => _RegisterFormState();
-}
-
-class _RegisterFormState extends State<_RegisterForm> {
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
     final registerCubit = context.watch<RegisterCubit>();
 
+    final username = registerCubit.state.username;
+    final password = registerCubit.state.password;
+
     return Form(
-        key: _formKey,
         child: Column(
-          children: [
-            CustomTextFormField(
-              label: 'Nombre de usuario',
-              onChange: (value) {
-                registerCubit.usernameChange(value);
-                _formKey.currentState?.validate();
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Campo requerido';
-                if (value.trim().isEmpty) return 'Campo requerido';
-                if (value.length < 6) return 'Mas de 6 letras';
-                return null;
-              },
-            ),
-            const SizedBox(height: 10),
-            CustomTextFormField(
-              label: 'Correo electrónico',
-              onChange: (value) {
-                registerCubit.emailChange(value);
-                _formKey.currentState?.validate();
-              },
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Campo requerido';
-                if (value.trim().isEmpty) return 'Campo requerido';
+      children: [
+        CustomTextFormField(
+            label: 'Nombre de usuario',
+            onChange: registerCubit.usernameChange,
+            errorMessage: username.errorMessage),
+        const SizedBox(height: 10),
+        CustomTextFormField(
+          label: 'Correo electrónico',
+          onChange: (value) {
+            registerCubit.emailChange(value);
+          },
+          validator: (value) {
+            if (value == null || value.isEmpty) return 'Campo requerido';
+            if (value.trim().isEmpty) return 'Campo requerido';
 
-                final emailRegExp = RegExp(
-                  r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
-                );
+            final emailRegExp = RegExp(
+              r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
+            );
 
-                if (!emailRegExp.hasMatch(value)) {
-                  return 'No tiene formato de correo';
-                }
+            if (!emailRegExp.hasMatch(value)) {
+              return 'No tiene formato de correo';
+            }
 
-                return null;
-              },
-            ),
-            const SizedBox(height: 10),
-            CustomTextFormField(
-              label: 'Contraseña',
-              onChange: (value) {
-                registerCubit.passwordChange(value);
-                _formKey.currentState?.validate();
-              },
-              obscureText: true,
-              validator: (value) {
-                if (value == null || value.isEmpty) return 'Campo requerido';
-                if (value.trim().isEmpty) return 'Campo requerido';
-                if (value.length < 6) return 'Mas de 6 letras';
-                return null;
-              },
-            ),
-            const SizedBox(height: 30),
-            FilledButton.tonalIcon(
-                onPressed: () {
-                  registerCubit.onSubmit();
-                },
-                icon: const Icon(Icons.save),
-                label: const Text('Guardar')),
-          ],
-        ));
+            return null;
+          },
+        ),
+        const SizedBox(height: 10),
+        CustomTextFormField(
+          label: 'Contraseña',
+          onChange: registerCubit.passwordChange,
+          errorMessage: password.errorMessage,
+          obscureText: true,
+        ),
+        const SizedBox(height: 30),
+        FilledButton.tonalIcon(
+            onPressed: () {
+              registerCubit.onSubmit();
+            },
+            icon: const Icon(Icons.save),
+            label: const Text('Guardar')),
+      ],
+    ));
   }
 }
