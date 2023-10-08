@@ -77,8 +77,9 @@ class _RegisterFormState extends State<_RegisterForm> {
                   r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$',
                 );
 
-                if (!emailRegExp.hasMatch(value))
+                if (!emailRegExp.hasMatch(value)) {
                   return 'No tiene formato de correo';
+                }
 
                 return null;
               },
