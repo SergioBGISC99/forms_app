@@ -16,7 +16,8 @@ class RegisterCubit extends Cubit<RegisterFormState> {
     final username = Username.dirty(value);
 
     emit(state.copyWith(
-        username: username, isValid: Formz.validate([username])));
+        username: username,
+        isValid: Formz.validate([username, state.password])));
   }
 
   void emailChange(String value) {
@@ -24,6 +25,10 @@ class RegisterCubit extends Cubit<RegisterFormState> {
   }
 
   void passwordChange(String value) {
-    emit(state.copyWith(password: value));
+    final password = Password.dirty(value);
+
+    emit(state.copyWith(
+        password: password,
+        isValid: Formz.validate([state.username, password])));
   }
 }
